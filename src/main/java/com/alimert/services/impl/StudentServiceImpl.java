@@ -47,7 +47,7 @@ public class StudentServiceImpl implements IStudentService {
     public DtoStudent getStudentById(Integer id) {
         DtoStudent dtoStudent = new DtoStudent();
 
-        Optional<Student> optional = studentRepository.findById(id);
+        Optional<Student> optional = studentRepository.findStudentById(id);
         if (optional.isPresent()) {
             Student dbStudent = optional.get();
             BeanUtils.copyProperties(dbStudent, dtoStudent);
