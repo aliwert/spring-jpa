@@ -44,27 +44,38 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public Student getStudentById(Integer id) {
+    public DtoStudent getStudentById(Integer id) {
+        DtoStudent dtoStudent = new DtoStudent();
+
         Optional<Student> optional = studentRepository.findById(id);
-        return optional.orElse(null);
+        if (optional.isPresent()) {
+            Student dbStudent = optional.get();
+            BeanUtils.copyProperties(dbStudent, dtoStudent);
+        }
+        return dtoStudent;
     }
 
     @Override
     public void deleteStudent(Integer id) {
-        Student dbStudent = getStudentById(id);
-        if (dbStudent != null) {
-            studentRepository.delete(dbStudent);
+        Optional<Student> optional = studentRepository.findById(id);
+        if (optional != null) {
+            studentRepository.delete(optional.get());
         }
     }
 
     @Override
-    public Student updateStudent(Integer id, Student updateStudent) {
-        Student dbUpdateStudent = getStudentById(id);
-        if (dbUpdateStudent != null) {
-            dbUpdateStudent.setFirstName(updateStudent.getFirstName());
-            dbUpdateStudent.setLastName(updateStudent.getLastName());
-            dbUpdateStudent.setBirthOfDate(updateStudent.getBirthOfDate());
-            return studentRepository.save(dbUpdateStudent);
+    public DtoStudent updateStudent(Integer id, DtoStudentIU dtoStudentIU) {
+        DtoStudent dtoStudent = new DtoStudent();
+
+        Optional<Student> optional = studentRepository.findById(id);
+        if (optional.isPresent()) {
+            Student dbStudent = optional.get();
+            dbStudent.setFirstName(dtoStudentIU.getFirstName());
+            dbStudent.setLastName(dtoStudentIU.getLastName());
+            dbStudent.setBirthOfDate(dtoStudentIU.getBirthOfDate());
+            Student updated =  studentRepository.save(dbStudent);
+            BeanUtils.copyProperties(updated, dtoStudent);
+            return dtoStudent;
         }
         return null;
     }
