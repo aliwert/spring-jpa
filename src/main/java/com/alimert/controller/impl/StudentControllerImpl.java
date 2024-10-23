@@ -1,6 +1,8 @@
 package com.alimert.controller.impl;
 
 import com.alimert.controller.IStudentController;
+import com.alimert.dto.DtoStudent;
+import com.alimert.dto.DtoStudentIU;
 import com.alimert.entities.Student;
 import com.alimert.services.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +21,12 @@ public class StudentControllerImpl implements IStudentController {
 
     @PostMapping(path = "/save")
     @Override
-    public Student saveStudent(@RequestBody Student student) {
-
-        return studentService.saveStudent(student);
+    public DtoStudent saveStudent(@RequestBody DtoStudentIU dtoStudentIU) {
+        return studentService.saveStudent(dtoStudentIU);
     }
     @GetMapping(path = "/list")
     @Override
-    public List<Student> getAllStudents() {
+    public List<DtoStudent> getAllStudents() {
         return studentService.getAllStudents();
     }
 
