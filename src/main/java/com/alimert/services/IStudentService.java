@@ -2,7 +2,10 @@ package com.alimert.services;
 
 import com.alimert.entities.Student;
 
+import java.util.List;
+
 public interface IStudentService {
 
     public Student saveStudent(Student student);
+    public List<Student> getAllStudents();
 }
