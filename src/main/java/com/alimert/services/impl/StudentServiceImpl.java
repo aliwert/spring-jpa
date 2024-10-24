@@ -1,7 +1,9 @@
 package com.alimert.services.impl;
 
+import com.alimert.dto.DtoCourse;
 import com.alimert.dto.DtoStudent;
 import com.alimert.dto.DtoStudentIU;
+import com.alimert.entities.Course;
 import com.alimert.entities.Student;
 import com.alimert.repository.StudentRepository;
 import com.alimert.services.IStudentService;
@@ -46,13 +48,24 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public DtoStudent getStudentById(Integer id) {
         DtoStudent dtoStudent = new DtoStudent();
-
         Optional<Student> optional = studentRepository.findStudentById(id);
-        if (optional.isPresent()) {
-            Student dbStudent = optional.get();
-            BeanUtils.copyProperties(dbStudent, dtoStudent);
+        if (optional.isEmpty()) {
+            return null;
+        }
+        Student dbStudent = optional.get();
+        BeanUtils.copyProperties(dbStudent, dtoStudent);
+        if (dbStudent.getCourses() != null && !dbStudent.getCourses().isEmpty()) {
+            for (Course course : dbStudent.getCourses()) {
+                DtoCourse dtoCourse = new DtoCourse();
+                BeanUtils.copyProperties(course, dtoCourse);
+
+                dtoStudent.getCourses().add(dtoCourse);
+
+
+            }
         }
         return dtoStudent;
+
     }
 
     @Override
@@ -73,7 +86,7 @@ public class StudentServiceImpl implements IStudentService {
             dbStudent.setFirstName(dtoStudentIU.getFirstName());
             dbStudent.setLastName(dtoStudentIU.getLastName());
             dbStudent.setBirthOfDate(dtoStudentIU.getBirthOfDate());
-            Student updated =  studentRepository.save(dbStudent);
+            Student updated = studentRepository.save(dbStudent);
             BeanUtils.copyProperties(updated, dtoStudent);
             return dtoStudent;
         }
