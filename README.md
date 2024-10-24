@@ -11,3 +11,5 @@ spring.jpa.hibernate.ddl-auto=create
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 ```
+## Important
+* When you run the project for the first time, set spring.jpa.hibernate.ddl-auto=create. After the table is created, don't forget to change it to update or none, but I recommend using update.
